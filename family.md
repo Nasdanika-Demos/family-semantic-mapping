@@ -1,0 +1,384 @@
+This site was generated as explained below:
+
+* A [Drawio](https://www.drawio.com/) diagram of family relationships was created based on images from the [Eclipse Sirius](https://eclipse.dev/sirius/) [BasicFamily Tutorial](https://wiki.eclipse.org/Sirius/Tutorials/BasicFamily). The diagram uses free icons from [Icons8](https://icons8.com/) to provide visual distinction between architecture elements. 
+* The diagram was [mapped](https://github.com/Nasdanika-Models/family#mapping) the [Family model](https://family.models.nasdanika.org/) using properties of the diagram elements.
+* Then the family model was transformed to the [HTML Application model](https://html-app.models.nasdanika.org/index.html) and a static web site was generated from that model. Icons were generated from the diagram images of the respective elements.
+* The web site is deployed by [GitHub Pages](https://pages.github.com/).
+
+Notes:
+
+* A click on a diagram element (family member) navigates to the element page.
+* [Search](search.html) provides full-text search which also searches for text in diagrams
+    * Search for a family member name finds it in the diagram on the home page
+    * Search for ``ethnicity`` finds ``ethnicities`` on the [Paul](references/members/paul/index.html) page 
+* There is a link to the [source code on GitHub](https://github.com/Nasdanika-Models/family/tree/main/demos/mapping) in the footer.
+
+```drawio
+${representations/drawio/diagram}
+```
+
+[TOC levels=2-6]
+
+## Mapping
+
+### Root -> Family
+
+The [root](https://drawio.models.nasdanika.org/references/eClassifiers/Root/index.html) of the diagram is mapped to [Family](https://family.models.nasdanika.org/references/eClassifiers/Family/index.html)
+with the ``type`` property set to ``Family``
+
+This documentation was generated from [family.md](https://github.com/Nasdanika-Models/family/blob/main/demos/mapping/family.md) markdown file with the diagram embedded using ``drawio`` fenced block with ``representations/drawio/diagram`` expansion token.
+
+Diagram semantic elements are mapped to the root semantic element (``Family``) using the following [``feature-map``](https://github.com/Nasdanika-Models/family#feature-map):
+
+```yaml
+container:
+  self: 
+    members:
+      argument-type: Person
+      comparator: label
+```
+
+The above mapping means that use the semantic element of this diagram element (root) and add semantic elements of its descendants to the ``members`` reference ordering by [``label``](https://github.com/Nasdanika-Models/family#label).
+[``argument-type``](https://github.com/Nasdanika-Models/family/tree/main#argument-type) specifies that only instances of [``Person``](https://family.models.nasdanika.org/references/eClassifiers/Person/index.html) shall be added to the ``members`` reference.
+This is not really necessary to specify ``argument-type`` in this case because the members reference type is ``Person``. 
+
+``page-element`` set to ``true`` specifies that the root semantic element shall also be the [page](https://drawio.models.nasdanika.org/references/eClassifiers/Page/index.html)'s semantic elements. 
+Because this is the top-level page (not linked from diagram elements), it also becomes the [document](https://drawio.models.nasdanika.org/references/eClassifiers/Document/index.html)'s semantic element and as such the contents element of the diagram's Ecore resource.
+
+Page name "Sample Family" is used to set the name of the family semantic element.
+
+### Diagram elements -> Man or Woman
+
+Diagram elements are mapped either to [Man](https://family.models.nasdanika.org/references/eClassifiers/Man/index.html) or [Woman](https://family.models.nasdanika.org/references/eClassifiers/Woman/index.html).
+They have [``semantic-id``](https://github.com/Nasdanika-Models/family#semantic-id) property to demonstrate its usage. 
+Another way to provide meaningful semantic ID's and URL's is to edit diagram element ID's.
+
+### Connections -> Father or Mother
+
+Connections establish family relationships using ``feature-map`` property:
+
+* ``source: father`` specifies that ``father`` feature of the connection source semantic element shall be set to the connection target semantic element.
+* ``source: mother`` specifies that ``mother`` feature of the connection source semantic element shall be set to the connection target semantic element.
+* ``source: parents``specifies that the connection target semantic element shall be added to the ``parents`` reference of the source semantic element.
+* ``target: children``specifies that the connection source semantic element shall be added to the ``children`` reference of the target semantic element.
+
+## Generation
+
+This site was generated with [82 lines of Java code](https://github.com/Nasdanika-Models/family/blob/main/demos/mapping/src/test/java/org/nasdanika/models/family/demos/mapping/tests/TestFamilyMappingSiteGen.java) in a JUnit test.
+
+### Representation element filtering
+
+Border of ``Isa`` is set during the generation with the following [code](https://github.com/Nasdanika-Models/family/blob/main/demos/mapping/src/test/java/org/nasdanika/models/family/demos/mapping/tests/TestFamilyMappingSiteGen.java#L38C1-L51C5):
+
+```java
+@Override
+protected void filterRepresentationElement(
+		Element representationElement, 
+		EObject semanticElement,
+		Map<EObject, EObject> registry,
+		ProgressMonitor progressMonitor) {
+				
+	// Demo of representation filtering - adding a black border to Isa
+	if (representationElement instanceof org.nasdanika.drawio.ModelElement) {
+		org.nasdanika.drawio.ModelElement rme = (org.nasdanika.drawio.ModelElement) representationElement;
+		if ("isa".equals(rme.getProperty("semantic-id"))) {
+			rme.getStyle().put("imageBorder", "default");
+		}
+	}
+}
+```
+
+Border of ``Fiona`` is also set during generation by ``FamilyRepresentationElementFilter`` class which is loaded using the [Capability framework](https://docs.nasdanika.org/core/capability/index.html).
+This approach allows to decouple representation filtering logic from the generation logic.
+
+Representation filtering may be used to inject information which is not available during diagram creation or dynamic, but is available during generation.
+
+## Markdown documentation
+
+This section demonstrates advanced capabilities of Markdown documentation. 
+
+### Embedded images
+
+You can embed PNG and JPEG using fenced blocks.
+
+#### PNG resource
+
+	```png-resource
+	isa.png
+	```
+
+Resource location is resolved relative to the [``base-uri``](https://github.com/Nasdanika-Models/family/tree/main#base-uri).
+
+#### JPEG resource
+
+	```jpeg-resource
+	my.jpeg
+	```
+
+#### PNG
+
+	```png
+	Base 64 encoded png 
+	```
+#### JPEG
+
+	```jpeg
+	Base 64 encoded jpeg
+	```
+
+### Embedded diagrams
+
+You can also embed [PlantUML](https://plantuml.com/), [Draw.io](https://www.diagrams.net/), and [Mermaid](https://mermaid-js.github.io/mermaid/#/) diagrams using fenced blocks. Draw.io diagrams can be edited in a desktop editor or [Online editor](https://app.diagrams.net/).
+
+#### Draw.io
+
+    ```drawio-resource
+    aws.drawio
+    ```
+
+Resource location is resolved in the same way as for image files as explained above.
+
+#### PlantUML
+
+PlantUML diagrams can be defined inline or loaded from resources.
+
+##### Loading from a resource
+
+    ```uml-resource
+    sequence.plantuml
+    ```
+
+##### Inline 
+
+The following language specifications (dialects) are supported:
+
+* ``uml`` - for the following diagram types:
+    * [Sequence](https://plantuml.com/sequence-diagram), 
+    * [Use Case](https://plantuml.com/use-case-diagram), 
+    * [Class](https://plantuml.com/class-diagram), 
+    * [Activity](https://plantuml.com/activity-diagram-beta), 
+    * [Component](https://plantuml.com/component-diagram), 
+    * [State](https://plantuml.com/state-diagram), 
+    * [Object](https://plantuml.com/object-diagram), 
+    * [Deployment](https://plantuml.com/deployment-diagram), 
+    * [Timing](https://plantuml.com/timing-diagram), 
+    * [Network](https://plantuml.com/nwdiag).
+* ``wireframe`` - for [Wireframe diagrams](https://plantuml.com/salt)
+* ``gantt`` - for [Gantt diagrams](https://plantuml.com/gantt-diagram)
+* ``mindmap`` - for [Mind Maps](https://plantuml.com/mindmap-diagram)
+* ``wbs`` - for [Work Breakdown Structures](https://plantuml.com/wbs-diagram)
+
+###### UML
+
+**Sequence**
+
+Fenced block:
+
+	```uml
+	Alice -> Bob: Authentication Request
+	Bob --> Alice: Authentication Response
+	```
+	
+Diagram:
+
+```uml
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+```
+
+**Component**
+
+Component diagram with links to component pages.
+
+
+Fenced block:
+
+	```uml
+    package Core {
+       component Common [[https://github.com/Nasdanika/core/tree/master/common]]
+    }
+    
+    package HTML {
+       component HTML as html [[https://github.com/Nasdanika/html/tree/master/html]]
+       [html] ..> [Common]
+    }
+	```
+	
+Diagram:
+
+```uml
+package Core {
+   component Common [[https://github.com/Nasdanika/core/tree/master/common]]
+}
+
+package HTML {
+   component HTML as html [[https://github.com/Nasdanika/html/tree/master/html]]
+   [html] ..> [Common]
+}
+```
+
+**Wireframe**
+
+Fenced block:
+
+	```wireframe
+	{
+	  Just plain text
+	  [This is my button]
+	  ()  Unchecked radio
+	  (X) Checked radio
+	  []  Unchecked box
+	  [X] Checked box
+	  "Enter text here   "
+	  ^This is a droplist^
+	}
+	```
+
+
+Diagram:
+
+```wireframe
+{
+  Just plain text
+  [This is my button]
+  ()  Unchecked radio
+  (X) Checked radio
+  []  Unchecked box
+  [X] Checked box
+  "Enter text here   "
+  ^This is a droplist^
+}
+```
+
+**Gantt**
+
+Fenced block:
+
+	```gantt
+	[Prototype design] lasts 15 days and links to [[https://docs.nasdanika.org/index.html]]
+	[Test prototype] lasts 10 days
+	-- All example --
+	[Task 1 (1 day)] lasts 1 day
+	[T2 (5 days)] lasts 5 days
+	[T3 (1 week)] lasts 1 week
+	[T4 (1 week and 4 days)] lasts 1 week and 4 days
+	[T5 (2 weeks)] lasts 2 weeks
+	```
+
+Diagram:
+
+```gantt
+[Prototype design] lasts 15 days and links to [[https://docs.nasdanika.org/index.html]]
+[Test prototype] lasts 10 days
+-- All example --
+[Task 1 (1 day)] lasts 1 day
+[T2 (5 days)] lasts 5 days
+[T3 (1 week)] lasts 1 week
+[T4 (1 week and 4 days)] lasts 1 week and 4 days
+[T5 (2 weeks)] lasts 2 weeks
+```
+
+**Mind Map**
+
+Fenced block:
+
+	```mindmap
+	* Debian
+	** [[https://ubuntu.com/ Ubuntu]]
+	*** Linux Mint
+	*** Kubuntu
+	*** Lubuntu
+	*** KDE Neon
+	** LMDE
+	** SolydXK
+	** SteamOS
+	** Raspbian with a very long name
+	*** <s>Raspmbc</s> => OSMC
+	*** <s>Raspyfi</s> => Volumio
+	```
+
+Diagram:
+
+```mindmap
+* Debian
+** [[https://ubuntu.com/ Ubuntu]]
+*** Linux Mint
+*** Kubuntu
+*** Lubuntu
+*** KDE Neon
+** LMDE
+** SolydXK
+** SteamOS
+** Raspbian with a very long name
+*** <s>Raspmbc</s> => OSMC
+*** <s>Raspyfi</s> => Volumio
+```
+
+**WBS**
+
+WBS elements can have links. This type of diagram can also be used to display organization structure.
+
+	```wbs
+	* [[https://docs.nasdanika.org/index.html Business Process Modelling WBS]]
+	** Launch the project
+	*** Complete Stakeholder Research
+	*** Initial Implementation Plan
+	** Design phase
+	*** Model of AsIs Processes Completed
+	**** Model of AsIs Processes Completed1
+	**** Model of AsIs Processes Completed2
+	*** Measure AsIs performance metrics
+	*** Identify Quick Wins
+	** Complete innovate phase
+	```
+
+Fenced block:
+
+
+Diagram:
+
+```wbs
+* [[https://docs.nasdanika.org/index.html Business Process Modelling WBS]]
+** Launch the project
+*** Complete Stakeholder Research
+*** Initial Implementation Plan
+** Design phase
+*** Model of AsIs Processes Completed
+**** Model of AsIs Processes Completed1
+**** Model of AsIs Processes Completed2
+*** Measure AsIs performance metrics
+*** Identify Quick Wins
+** Complete innovate phase
+```
+
+#### Mermaid
+
+You can define [Mermaid](https://mermaid-js.github.io/mermaid/#/) diagrams in ``mermaid`` fenced blocks:
+
+  ```mermaid
+  flowchart LR
+     Alice --> Bob & Chuck --> Deb
+  ```
+
+results in this diagram:
+
+```mermaid
+flowchart LR
+   Alice --> Bob & Chuck --> Deb
+```
+
+##### Loading from a resource
+
+It is also possible to load a diagram definition from a resource resolved relative to the model resource:
+
+    ```mermaid-resource
+    sequence.mermaid
+    ```
+
+### Extensions
+
+* [Table of contents](https://github.com/vsch/flexmark-java/wiki/Table-of-Contents-Extension) - add ``[TOC]`` to the document as explained in the documentation. This extension will create a table of contents from markdown headers. 
+* [Footnotes](https://github.com/vsch/flexmark-java/wiki/Footnotes-Extension)
+* Strikethrough: ``~~strikethrough~~``-> ~~strikethrough~~ 
+* Subscript: ``H~2~O`` -> H~2~0
+* Superscript: ``2^5^ = 32`` -> 2^5^ = 32

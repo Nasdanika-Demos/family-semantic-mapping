@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="EN">
+  <head>
+    <title>Paul</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/cerulean/bootstrap.min.css" id="nsd-bootstrap-theme-stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Nasdanika/html@master/model/app.gen/web-resources/css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.11/dist/themes/default/style.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.1.0/github-markdown.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.css">
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika/html@master/model/app.gen/web-resources/js/common.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika/html@master/model/app.gen/web-resources/js/dark-head.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstree@3.3.11/dist/jstree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika/html@master/model/app.gen/web-resources/js/components/table.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika-Models/ecore@master/graph/web-resources/components/table.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9BRJVLK8CC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-9BRJVLK8CC');
+</script>    
+
+<script src="../../../search-documents.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/olivernn/lunr.js@v2.3.9/lunr.js"></script>
+
+<script>
+// Script for full-text search of JsTree
+
+window.nsdJsTreeSearchCallback = function(str, node) { 
+    var sf = new $.vakata.search(str, true, { caseSensitive : false, fuzzy : false }); 
+    if (sf.search(node.text).isMatch) {
+		return true;
+	} 
+    let searchResult = this.search(str); 
+    for (const sr in searchResult) {
+        if (searchResult[sr].ref === node.original['data-nsd-label-uuid']) {
+            return true;
+        } 
+    } 
+    return false; 
+}.bind(lunr(function () {
+			  this.ref('id');
+			  this.field('title');
+			  this.field('content');
+
+			  for (const key in searchDocuments) {
+				  let doc = searchDocuments[key];
+				this.add({
+					id: doc['action-uuid'],
+					title: doc.title,
+					path: doc.path,
+					content: doc.content
+				});  
+			  }
+			}));
+</script>
+</head>
+  <body>
+    <div class="container-fluid nsd-app-container">
+      <div class="row">
+        <div class="col nsd-app-header">
+          <a href="https://family.models.nasdanika.org" data-nsd-label-uuid="0cc6f19a-8f04-4173-a7ba-34a5a974ceaa" class="nsd-app-header-title">
+            <img src="https://docs.nasdanika.org/images/nasdanika-logo.png" class="nsd-app-label-icon">Nasdanika Family Model</a>
+          <ul class="nav nsd-app-header-navs">
+            <li class="nav-item">
+              <a href="../../../search.html" data-nsd-label-uuid="b936a592-c2a8-41a6-ace2-4403bbd2499c" class="nav-link"><span class="fas fa-search nsd-app-label-icon"></span>Search</a>
+            </li>
+            <li class="nav-item">
+              <a href="../../../glossary.html" data-nsd-label-uuid="b96725f5-5c45-427b-b86c-1d716f055caf" class="nav-link"><span class="fas fa-book nsd-app-label-icon"></span>Glossary</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col nsd-app-navbar">
+          <ul class="navbar navbar-light navbar-expand-lg">
+            <a href="../../../index.html" data-nsd-label-uuid="e3560360-efa4-444e-81ad-b9ab13e11484" class="navbar-brand">
+              <img src="https://img.icons8.com/officexs/24/family--v1.png" class="nsd-app-label-icon">Sample Family</a>
+            <button type="button" data-toggle="collapse" data-target="#nsd_45" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="nsd_45" class="collapse navbar-collapse"></div>
+          </ul>
+        </div>
+      </div>
+      <div class="row nsd-app-content-row">
+        <div class="col nsd-app-navigation-panel">
+          <div class="list-group list-group-flush">
+            <a href="../alain/index.html" data-nsd-label-uuid="8fd2ffc0-2ec0-4ada-9d81-0bf4dddfb182" class="list-group-item list-group-action">
+              <img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Alan</a>
+            <a href="../albert/index.html" data-nsd-label-uuid="8977c39c-2ebb-46ff-9a71-4513a47bbc88" class="list-group-item list-group-action">
+              <img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Albert</a>
+            <a href="../bryan/index.html" data-nsd-label-uuid="95215882-3642-451e-9db9-9e9394c476ce" class="list-group-item list-group-action">
+              <img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Bryan</a>
+            <a href="../clara/index.html" data-nsd-label-uuid="4579cc79-a53c-4fcf-a609-c0fba1c601d2" class="list-group-item list-group-action">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC" class="nsd-app-label-icon">Clara</a>
+            <a href="../dave/index.html" data-nsd-label-uuid="e76d2dbe-98fb-4809-a660-69c05a742fbf" class="list-group-item list-group-action">
+              <img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Dave</a>
+            <a href="../elias/index.html" data-nsd-label-uuid="122f7fa5-57cb-4ef8-a982-3e6828e4d651" class="list-group-item list-group-action">
+              <img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Elias</a>
+            <a href="../fiona/index.html" data-nsd-label-uuid="430ab795-04c5-4e60-9352-6003fc1d33fc" class="list-group-item list-group-action">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAC1UlEQVR4XtWUXUhTYRjHrbTZBxqpm245dZu6r7Phps6zzblNZ9t0QZKhFqQVapGoJGE3ZRd+QDd1kRRmKJX4sdBELCqUMimFqIQQIkRIS8uyLCQK+/eexSCPsay7fvDnwOF5frzPec45fn7/NWazOdCYQNWbNNSDTFpbXZmbu4Fd8zesSU2g2mhKCrtei922VOw00z3MfXbhqkhSSnM8MkMing248Xq0DydKC1CYlZ7Hrl0VsZGCa5ZEFQbdl7A4O4mPE4/R39SAvMzUFxeKiwPY9T7RarUB/LCQ6bqKIsw/H8HXhXf49HIcU0OdZHTj95qyPdvYPT5RicXcSF7YN/fpKrx9cgsLk2N4Pz6Mhx1nQUmil2rLD/LYPT5JiI/niwXhX9K1Ckz0NWJmpAfTQ+2o3LsDtEp6A/+yGLKUo+o48ezthjJM9J7D1J0WmJPUnxVxMWp27aqQSCRitUq1ePXkEUzebMXM3XaUF+WfYt5Ndq1PRCKRUC6X11GU8o1SoUCaUY9HXWTsex2orSoBTdPzGRkZV6xWq4nd+1uEfN6ANC4WMpkMFEWBbBz783fh1WAbnnafhy45GTabDWlpprlcmv7zlxMZwbsvjo6CisjISaHRaKDX63Gxrhpzw53IydoOp9MJi8WCbKezlN2/gshwXi8jpJRKj5A5YUpKCjJt6Ri73oT6Y4eRnZ0Nu91OxI5Rh8PBYTuWIYzgXfYKmZHVajV0Oh1MJhMOHdiHpuZWj9ArdbmchWzHMsgJmxkhsxDmdDKplFkEDAaD59k1NHd7Rna5XLCSscm1k+34lY280K3FoijhB69QLpMtMSMbjUbPcyupPO4REvliolbbI5VIaNLnzxZ5WU8S5e/vbwkKCqoICQk5w+FwGrcEB3cJBIJ+LpfrFgqjW0JDQ2s2BQYWkNokEi7J2uWalTB/k2ASPomYRE6iJJGSxPj9lGwmWedt8PIDc8MjDfZmTCEAAAAASUVORK5CYII=" class="nsd-app-label-icon">Fiona</a>
+            <a href="../isa/index.html" data-nsd-label-uuid="07d14501-13b3-461c-8d30-eee5b7a82c93" class="list-group-item list-group-action">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC" class="nsd-app-label-icon">Isa</a>
+            <a href="../katell/index.html" data-nsd-label-uuid="49d5e054-b5d5-465b-96f7-048d56dfc848" class="list-group-item list-group-action">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC" class="nsd-app-label-icon">Katell</a>
+            <a href="../lea/index.html" data-nsd-label-uuid="42ab453a-1f82-47a7-a284-b4e7f71c9e7f" class="list-group-item list-group-action">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC" class="nsd-app-label-icon">Lea</a><span data-nsd-label-uuid="b6c32b3b-bb28-4032-bb61-205e5559773a" class="list-group-item list-group-action active"><img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Paul</span>
+          </div>
+        </div>
+        <div data-nsd-label-uuid="b6c32b3b-bb28-4032-bb61-205e5559773a" data-nsd-action-uris="uuid:b6c32b3b-bb28-4032-bb61-205e5559773a" class="col nsd-app-content-panel">
+          <div class="container-fluid">
+            <div class="row nsd-app-content-panel-title-and-items-row">
+              <div class="col-auto">
+                <h1><span data-nsd-label-uuid="b6c32b3b-bb28-4032-bb61-205e5559773a" class="nsd-app-content-panel-title"><img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon">Paul</span>
+                </h1>
+              </div>
+            </div>
+            <div class="row nsd-app-content-panel-content-row">
+              <div class="col">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col"><div class="markdown-body"><p><img src="data:image/png;base64,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" alt="image"></p>
+<p>Paul is a common Latin masculine given name in countries and ethnicities with a Christian heritage (Eastern Orthodoxy, Catholicism, Protestantism) and, beyond Europe, in Christian religious communities throughout the world. Paul - or its variations - can be a given name or surname.</p>
+<h2><a href="#origin-and-diffusion" id="origin-and-diffusion">Origin and diffusion</a></h2>
+<p>The name has existed since Roman times. It derives from the Roman family name Paulus or Paullus, from the Latin adjective meaning “small”, “humble”, “least” or “little” . During the Classical Age it was used to distinguish the minor of two people of the same family bearing the same name. The Roman patrician family of the Gens Aemilia included such prominent persons as Lucius Aemilius Paullus, Lucius Aemilius Paullus Macedonicus, Lucius Aemilius Lepidus Paullus, Tertia Aemilia Paulla (the wife of Scipio Africanus), and Sergius Paulus.</p>
+<p>Its prevalence in nations with a Christian heritage is primarily due to its attachment to Saint Paul the Apostle, whose Greek name waswas Παῦλος, Paûlos, a transliteration from the Latin, also carrying the “modest” meaning of this name, and chosen because of its similarity to his Jewish name Šaul. The name Paul is common, with variations, in all European languages.</p>
+<p>Paul’s popularity has varied. In the United States, the 1990 census shows it ranked the 13th most common (male) name; however, Social Security Administration data shows popularity in the top 20 until 1968, with steadily declining use until its 2015 rank of 200th.</p>
+<p>The feminine versions are Paula, Pauline, Paulina, and Paulette.</p>
+</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col nsd-app-footer">
+          <ul class="nav nsd-app-footer-navs">
+            <li class="nav-item">
+              <a href="https://github.com/Nasdanika-Models/family" data-nsd-label-uuid="fd64c924-8208-481d-a6b8-22a3c8bd5148" class="nav-link"><span class="fab fa-github nsd-app-label-icon"></span>Sources</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
