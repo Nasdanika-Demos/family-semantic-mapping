@@ -1,30 +1,29 @@
 package org.nasdanika.models.family.demos.mapping;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import org.nasdanika.capability.CapabilityProvider;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.emf.SemanticDrawioFactory;
-import org.nasdanika.drawio.emf.SemanticDrawioFactory.RepresentationElementFilter;
+import org.nasdanika.mapping.AbstractMappingFactory;
+import org.nasdanika.mapping.AbstractMappingFactory.Contributor;
 
 /**
  * Provides an {@link OpenAIClient} instance.  
  */
-public class FamilyRepresentationElementFilterCapabilityFactory extends ServiceCapabilityFactory<SemanticDrawioFactory<?>, RepresentationElementFilter> {
+public class FamilyRepresentationElementFilterCapabilityFactory extends ServiceCapabilityFactory<AbstractMappingFactory<?,?>, Contributor<?,?>> {
 
 	@Override
 	public boolean isFor(Class<?> type, Object requirement) {
-		return RepresentationElementFilter.class.equals(type);
+		return Contributor.class.equals(type);
 	}
 
 	@Override
-	protected CompletionStage<Iterable<CapabilityProvider<RepresentationElementFilter>>> createService(
-			Class<RepresentationElementFilter> serviceType, SemanticDrawioFactory<?> serviceRequirement,
-			BiFunction<Object, ProgressMonitor, CompletionStage<Iterable<CapabilityProvider<Object>>>> resolver,
+	protected CompletionStage<Iterable<CapabilityProvider<Contributor<?, ?>>>> createService(
+			Class<Contributor<?, ?>> serviceType, 
+			AbstractMappingFactory<?, ?> serviceRequirement, 
+			Loader loader,
 			ProgressMonitor progressMonitor) {
-		
 		return wrap(new FamilyRepresentationElementFilter());
 	}
 

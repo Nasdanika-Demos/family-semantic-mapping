@@ -1,73 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" >
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/glossary.html</loc>
-    <lastmod>2024-08-30T11:29:29.049-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//index.html</loc>
+    <lastmod>2025-03-14T19:06:38.729-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/index.html</loc>
-    <lastmod>2024-08-30T11:29:29-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/alan/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.734-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/alain/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.007-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/albert/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.735-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/albert/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.009-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/bryan/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.736-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/bryan/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.012-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/clara/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.737-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/clara/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.016-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/dave/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.738-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/dave/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.018-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/elias/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.740-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/elias/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.022-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/fiona/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.741-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/fiona/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.025-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/isa/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.743-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/isa/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.028-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/katell/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.744-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/katell/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.033-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/lea/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.746-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/lea/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.036-04:00</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/references/members/paul/index.html</loc>
-    <lastmod>2024-08-30T11:29:29.040-04:00</lastmod>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://family.models.nasdanika.org/demos/mapping/search.html</loc>
-    <lastmod>2024-08-30T11:29:29.044-04:00</lastmod>
+    <loc>https://nasdanika-demos.github.io/family-semantic-mapping//references/members/paul/index.html</loc>
+    <lastmod>2025-03-14T19:06:38.747-04:00</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 </urlset>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="EN">
+  <head>
+    <title>Alan</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/lumen/bootstrap.min.css" id="nsd-bootstrap-theme-stylesheet"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Nasdanika-Models/html-app@master/gen/web-resources/css/app.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree@3.3.11/dist/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.7.0/github-markdown.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.23.0/dist/bootstrap-vue.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika-Models/html-app@master/gen/web-resources/js/common.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika-Models/html-app@master/gen/web-resources/js/dark-head.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstree@3.3.11/dist/jstree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-vue@2.23.0/dist/bootstrap-vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Nasdanika-Models/html-app@master/gen/web-resources/js/components/table.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/groovy.min.js"></script><!--  Start search configuration -->
+<script src="../../../search-documents.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/olivernn/lunr.js@v2.3.9/lunr.js"></script>
+
+<script>
+// Script for full-text search of JsTree
+
+window.nsdJsTreeSearchCallback = function(str, node) { 
+    var sf = new $.vakata.search(str, true, { caseSensitive : false, fuzzy : false }); 
+    if (sf.search(node.text).isMatch) {
+		return true;
+	} 
+    let searchResult = this.search(str); 
+    for (const sr in searchResult) {
+        if (searchResult[sr].ref === node.original['data-nsd-label-uuid']) {
+            return true;
+        } 
+    } 
+    return false; 
+}.bind(lunr(function () {
+			  this.ref('id');
+			  this.field('title');
+			  this.field('content');
+
+			  for (const key in searchDocuments) {
+				  let doc = searchDocuments[key];
+				this.add({
+					id: doc['link-uuid'],
+					title: doc.title,
+					path: doc.path,
+					content: doc.content
+				});  
+			  }
+			}));
+</script>
+<!-- End search configuration  -->
+          
+</head>
+  <body>
+    <div class="container-fluid nsd-app-container">
+      <div class="row">
+        <div class="col nsd-app-header">
+          <a href="https://github.com/Nasdanika-Demos" data-nsd-label-uuid="35d55070-5d5f-4a64-ba9c-3a68da8d81fa" class="nsd-app-header-title">
+            <img src="https://docs.nasdanika.org/images/nasdanika-logo.png" class="nsd-app-label-icon"/>Nasdanika Demos</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col nsd-app-navbar">
+          <ul class="navbar navbar-light navbar-expand-lg">
+            <a href="../../../index.html" data-nsd-label-uuid="2d653072-40e3-4328-94f2-0166b0144668" class="navbar-brand">
+              <img src="https://img.icons8.com/officexs/24/family--v1.png" class="nsd-app-label-icon"/>Sample Family</a>
+            <button type="button" data-toggle="collapse" data-target="#nsd_2k" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="nsd_2k" class="collapse navbar-collapse"></div>
+          </ul>
+        </div>
+      </div>
+      <div class="row nsd-app-content-row">
+        <div class="col nsd-app-navigation-panel">
+          <div class="nsd-collapse-panel bg-light text-center"><span data-toggle="collapse" data-target="#nsd-nav-panel-78b990c4-08e7-4522-a5fb-1b7f4b595dca-collapsible" aria-expanded="true" aria-controls="nsd-nav-panel-78b990c4-08e7-4522-a5fb-1b7f4b595dca-collapsible" title="Toggle panel" id="nsd-nav-panel-78b990c4-08e7-4522-a5fb-1b7f4b595dca-collapsible-trigger" class="nsd-collapsible-trigger"><i aria-hidden="true" class="fa"></i></span>
+          </div>
+          <div id="nsd-nav-panel-78b990c4-08e7-4522-a5fb-1b7f4b595dca-collapsible" style="clear:right" class="nsd-collapsible collapse show">
+            <input type="text" id="3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel_searchInput" title="Full-text search. You can use wildcards, e.g. 'foo*' or 'f*o'; title or content fields, e.g. 'title:foo* bar'; boosts, e.g. 'foo^10 bar'; fuzzy matches, e.g. 'foo~1'; and term presence, e.g. '+foo bar -baz'" class="form-control mt-1"/>
+            <div id="3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel"></div>
+            <script>$(document).ready( function() {
+$('#3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel').jstree(function(tree) { tree.state.filter = function(state) { delete state.core.selected; return state; };  tree.search.search_callback = function(searchStr, node) { if (typeof window.nsdJsTreeSearchCallback === 'function') return window.nsdJsTreeSearchCallback(searchStr, node); var sf = new $.vakata.search(searchStr, true, { caseSensitive : false, fuzzy : false }); return sf.search(node.text).isMatch; }; return tree; }({"core":{"data":[{"data-nsd-label-uuid":"33f8dae5-de07-47e2-9bb5-c90056f37f98","icon":"https://img.icons8.com/officexs/24/user.png","state":{"selected":true},"id":"nsd_2l","text":"Alan","type":"leaf"},{"a_attr":{"onclick":"window.location='../albert/index.html';"},"data-nsd-label-uuid":"97eb489f-6cf0-4284-81df-8b13019b0e5d","icon":"https://img.icons8.com/officexs/24/user.png","id":"nsd-app-nav-item-399209ec-58b3-455a-b3a2-4c439f6ee18b","text":"Albert","type":"leaf"},{"a_attr":{"onclick":"window.location='../bryan/index.html';"},"data-nsd-label-uuid":"6bddcbfa-e856-47db-b794-9b2d1b18d5ed","icon":"https://img.icons8.com/officexs/24/user.png","id":"nsd-app-nav-item-412da0b2-cbc9-4902-858d-d0637ccb3636","text":"Bryan","type":"leaf"},{"a_attr":{"onclick":"window.location='../clara/index.html';"},"data-nsd-label-uuid":"deb94b7f-870e-4c68-90c6-65ebc6a553ac","icon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC","id":"nsd-app-nav-item-31194c7d-a955-4828-88fc-8aad49ea289a","text":"Clara","type":"leaf"},{"a_attr":{"onclick":"window.location='../dave/index.html';"},"data-nsd-label-uuid":"bacbe646-c7d7-415d-a65e-6c5b32f13949","icon":"https://img.icons8.com/officexs/24/user.png","id":"nsd-app-nav-item-02d3b41f-ae64-4bb3-9d81-9ad044fec95e","text":"Dave","type":"leaf"},{"a_attr":{"onclick":"window.location='../elias/index.html';"},"data-nsd-label-uuid":"d722f8f8-a24a-42ab-a130-213ad460c599","icon":"https://img.icons8.com/officexs/24/user.png","id":"nsd-app-nav-item-ec095574-5744-4f93-8607-59854786156e","text":"Elias","type":"leaf"},{"a_attr":{"onclick":"window.location='../fiona/index.html';"},"data-nsd-label-uuid":"62fe9e25-472f-4b4b-9fa4-17590e41b300","id":"nsd-app-nav-item-09ffc1b7-e14c-4b6d-ae3a-94518e620ddd","text":"Fiona","type":"leaf"},{"a_attr":{"onclick":"window.location='../isa/index.html';"},"data-nsd-label-uuid":"d02fac1a-0c68-4ec3-8c94-48df35b97882","icon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC","id":"nsd-app-nav-item-e2930f56-1f04-4063-9bd8-d7d2e4fa19bd","text":"Isa","type":"leaf"},{"a_attr":{"onclick":"window.location='../katell/index.html';"},"data-nsd-label-uuid":"32c908d1-997c-408a-90bf-1da4a9ca95a0","icon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC","id":"nsd-app-nav-item-ef64dc55-ea1f-4f46-a10e-220b6ecdb9d5","text":"Katell","type":"leaf"},{"a_attr":{"onclick":"window.location='../lea/index.html';"},"data-nsd-label-uuid":"7109faa4-8b03-4723-a304-4605ec758acb","icon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADEklEQVR4Xp2T20tUURTGTz5FEEQPvfQfFEjpjOaFUs/ojDpzZsa8k6ZdNO+KFs2Z0TlOaoo6aiSmRmrmBUxFIQp6qJccMTEhrAx6rNAoQkmL0tVa2zw62yJwwcdsZn3rt9deex9B+Ec4rb6HZEnrskv+s7JZs/pHz8pN2qO8979ht2hOY/FXJf4EtGSEQ3t2FHRk66EqKRhks/aLbPFvVizHDvB1fw27WWtC2K9mBPUVS9BfsqWeglhovaAD2gg983Zj0GG+3iuuSCH7bWbtQtPZMC/QdvWh7hWZNrv1KIrgw3PUwO5yK+ICsDPTDtDdQiPUpoZCY/optVuHVQuypEnmOWrgMcYb0jYKSF35MUDd1iSHgN2ihcZzYey3M0fP8vVnTtLRx3iOGjSXm+dFZu64pGfFrXlRMF6XArODBbA8XQX95Va4nhLCPDRP7PAdz1HDbtZ8bLsYycyVOPiR6kT4NlPtpRcD+eDAjcjTlhVJwEWeowZ2+PlWVhQz4xrmhot3AOk/ypGHnhOul3iOGpj8QUclc7k1AKZ7c3cAPV3ZUBEXyDy3cwwEXFfCwvbyLEFJCDpIO9/Ji2bmGpzTkCt+B7DPYWG3vXHzsaxbmznwCM8T7Fb/UErSG2PzwVmW4xOaG9069svhQvZUNsfSW2RkF4dvN5PnCbJFE43An/REWjIjoCoxGCoSA9Zbr4owUGdharXpwJkUuOZKCAL6kpynA4G+dfrueR4LWfLzxdffieDnTkk71p4XPtZbbYTxG0lMvTUm6CgU72NuAD2TeMNOxeS/j+d4hSciwm9CFIc8ovh9NF2E7muxMP+gBN6ienA9gv9hbgU1SF6+Xg1QFB+PTleLxrVXqakwI0nwNFaEnjIDdLliGLj7sgGeGEWWm0MPeSdFsQYEYQ/PEzDZOGUwwKIsw2pTE7xOS4P3paWw7G6Ax64MeFiZDkvuevhQVgZvMEeeBZsNpvR6mNDp6r1h2Drttgkjrbjd6prX9hzVUC1Cj6vASZ2uiY7xyeHYlagWm3JvAUXxEe5CO+1axCDWb4snlzfpfIuPAAAAAElFTkSuQmCC","id":"nsd-app-nav-item-5596fb65-9f8e-4eb7-b046-42d4063e78b9","text":"Lea","type":"leaf"},{"a_attr":{"onclick":"window.location='../paul/index.html';"},"data-nsd-label-uuid":"d6dcbe14-dea8-49f6-8ad0-bfaba5157a06","icon":"https://img.icons8.com/officexs/24/user.png","id":"nsd-app-nav-item-c3828513-af6d-454b-b28a-643f36995c5b","text":"Paul","type":"leaf"}]},"search":{"show_only_matches":true,"show_only_matches_children":true},"types":{"leaf":{"icon":"jstree-file"}},"plugins":["state","type","search"],"state":{"key":"3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel"}}));
+// Tokens: searchInputSelector, timer, treeSelector
+$('#3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel_searchInput').keyup(function () {
+    if (window['nsd_jstTreeSearchTimer_nsd_2w']) { 
+		clearTimeout(window['nsd_jstTreeSearchTimer_nsd_2w']); 
+	}
+    window['nsd_jstTreeSearchTimer_nsd_2w'] = setTimeout(function () {
+      var v = $('#3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel_searchInput').val();
+      $('#3064ffcf-aaa5-47ec-876b-fb388f44bf0d-navigation-panel').jstree(true).search(v);
+    }, 250);
+  });
+
+});</script>
+          </div>
+        </div>
+        <div data-nsd-label-uuid="33f8dae5-de07-47e2-9bb5-c90056f37f98" data-nsd-action-uris="uuid:33f8dae5-de07-47e2-9bb5-c90056f37f98" class="col nsd-app-content-panel">
+          <div class="container-fluid">
+            <div class="row nsd-app-content-panel-title-and-items-row">
+              <div class="col-auto">
+                <H1><span data-nsd-label-uuid="33f8dae5-de07-47e2-9bb5-c90056f37f98" class="nsd-app-content-panel-title"><img src="https://img.icons8.com/officexs/24/user.png" class="nsd-app-label-icon"/>Alan<a href="https://family.models.nasdanika.org/references/eClassifiers/Man/index.html" title="An adult male human" style="vertical-align:super;font-size:x-small;margin-left:0.2em"><span class="far fa-question-circle nsd-app-label-icon"></span></a></span>
+                </H1>
+              </div>
+            </div>
+            <div class="row nsd-app-content-panel-content-row">
+              <div class="col">
+                <div class="container-fluid"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col nsd-app-footer">
+          <ul class="nav nsd-app-footer-navs">
+            <li class="nav-item">
+              <a href="https://github.com/Nasdanika-Demos/family-semantic-mapping" data-nsd-label-uuid="2fb2f6b3-7083-45b5-9d80-3e103c4da523" class="nav-link"><span class="fab fa-github nsd-app-label-icon"></span>Source</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
