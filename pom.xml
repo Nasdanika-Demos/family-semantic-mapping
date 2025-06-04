@@ -57,6 +57,12 @@
 			<artifactId>processors</artifactId>
 			<version>2025.5.0</version>
 		</dependency>		
+        <dependency>
+            <groupId>org.nasdanika.ai</groupId>
+            <artifactId>emf</artifactId>
+            <version>2025.5.0</version>
+        </dependency>
+               
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-api</artifactId>
