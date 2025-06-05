@@ -2,16 +2,21 @@ package org.nasdanika.models.family.demos.mapping.tests;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.junit.jupiter.api.Test;
+import org.nasdanika.ai.emf.DoubleEObjectGraphMessageProcessor;
 import org.nasdanika.ai.emf.EObjectGraphMessageProcessor;
 import org.nasdanika.ai.emf.EObjectGraphMessageProcessor.Collector;
 import org.nasdanika.ai.emf.EObjectGraphMessageProcessor.Message;
@@ -42,30 +47,43 @@ public class TestFamilySimilarity {
 		File familyDiagramFile = new File("family.drawio").getCanonicalFile();
 		Resource familyResource = resourceSet.getResource(URI.createFileURI(familyDiagramFile.getAbsolutePath()), true);
 		
-		EObjectGraphMessageProcessor<String> messageProcessor = new EObjectGraphMessageProcessor<>(false, familyResource.getContents(), progressMonitor) {
+		EObjectGraphMessageProcessor<String,Void,Void> messageProcessor = new EObjectGraphMessageProcessor<>(false, familyResource.getContents(), progressMonitor) {
 			
 			@Override
 			protected boolean test(Message<String> message) {
-				Element sender = message.sender();
-				
-				// TODO - person senders are OK
-				
-				System.out.println(sender);
+				if (message.depth() > 100) {
+					return false;
+				}
+				Element sender = message.sender();				
 				if (sender instanceof EReferenceConnection) {
 					EReferenceConnection refConn = (EReferenceConnection) sender;
 					EReference ref = refConn.get().reference();
 					EPackage pkg = ref.getEContainingClass().getEPackage();
 					return pkg == FamilyPackage.eINSTANCE;
 				}
+				if (sender instanceof EObjectNode) {
+					return ((EObjectNode) sender).get() instanceof Person;
+				}
+				Element recipient = message.recipient();				
+				if (recipient instanceof EObjectNode) {
+					return ((EObjectNode) recipient).get() instanceof Person;
+				}
 				return false; // super.test(message);
 			}
 			
 		};
+		
+		// Sender -> receiver:counter
+		Map<Element, Map<Node,AtomicInteger>> counters = new ConcurrentHashMap<>();
+		
 		Collector<String> collector = new Collector<String>() {
 			
 			@Override
 			public void outgoing(Node node, Connection connection, Message<String> input, ProgressMonitor progressMonitor) {
-				System.out.println("Outgoing " + node + " " + connection);				
+				Element rootSender = input.rootSender().sender();
+				if (rootSender != null) {
+					counters.computeIfAbsent(rootSender, e -> new ConcurrentHashMap<>()).computeIfAbsent(node, n -> new AtomicInteger()).incrementAndGet();
+				}
 			}
 			
 			@Override
@@ -75,7 +93,10 @@ public class TestFamilySimilarity {
 			
 			@Override
 			public void incoming(Node node, Connection connection, Message<String> input, ProgressMonitor progressMonitor) {
-				System.out.println("Incoming " + node + " " + connection);				
+				Element rootSender = input.rootSender().sender();
+				if (rootSender != null) {
+					counters.computeIfAbsent(rootSender, e -> new ConcurrentHashMap<>()).computeIfAbsent(node, n -> new AtomicInteger()).incrementAndGet();
+				}
 			}
 			
 		};
@@ -86,7 +107,8 @@ public class TestFamilySimilarity {
 					.filter(e -> {
 						Element key = e.getKey();
 						if (key instanceof EObjectNode) {
-							return ((EObjectNode) key).get() instanceof Person;
+							EObjectNode eObjNode = (EObjectNode) key;
+							return eObjNode.get() instanceof Person && ((Person) eObjNode.get()).getName().equals("Katell");
 						}
 						return false;
 					})
@@ -99,8 +121,176 @@ public class TestFamilySimilarity {
 				selector, 
 				collector, 
 				progressMonitor);
-		
+
+		for (Entry<Element, Map<Node, AtomicInteger>> se: counters.entrySet()) {			
+			Element key = se.getKey();
+			if (key instanceof EObjectNode) {
+				EObject sObj = ((EObjectNode) key).get();
+				if (sObj instanceof Person) {
+					System.out.println(((Person) sObj).getName());
+					for (Entry<Node, AtomicInteger> ne: se.getValue().entrySet()) {
+						Node nKey = ne.getKey();
+						if (key instanceof EObjectNode) {
+							EObject nObj = ((EObjectNode) nKey).get();
+							if (nObj instanceof Person) {
+								System.out.println("\t" + ((Person) nObj).getName() + ": " + ne.getValue());
+							}
+						}			
+					}
+				}
+			}			
+		}
 		
 	}
+		
+	@Test
+	public void testDoubleSyncMessageProcessing() throws Exception {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);		
+		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+				
+		File familyDiagramFile = new File("family.drawio").getCanonicalFile();
+		Resource familyResource = resourceSet.getResource(URI.createFileURI(familyDiagramFile.getAbsolutePath()), true);
+		
+		DoubleEObjectGraphMessageProcessor<Void> messageProcessor = new DoubleEObjectGraphMessageProcessor<>(false, familyResource.getContents(), progressMonitor) {
+			
+			@Override
+			protected boolean test(Message<Double> message) {
+//				if (message.depth() > 10) {
+//					return false;
+//				}				
+				return true;
+//				Element sender = message.sender();				
+//				if (sender instanceof EReferenceConnection) {
+//					EReferenceConnection refConn = (EReferenceConnection) sender;
+//					EReference ref = refConn.get().reference();
+//					EPackage pkg = ref.getEContainingClass().getEPackage();
+//					return pkg == FamilyPackage.eINSTANCE;
+//				}
+//				if (sender instanceof EObjectNode) {
+//					return ((EObjectNode) sender).get() instanceof Person;
+//				}
+//				Element recipient = message.recipient();				
+//				if (recipient instanceof EObjectNode) {
+//					return ((EObjectNode) recipient).get() instanceof Person;
+//				}
+//				
+//				return false; // super.test(message);
+			}
+			
+			@Override
+			protected Double getOutgoingConnectionWeight(Connection connection) {
+				return null;
+			}
+			
+			@Override
+			protected Double getIncomingConnectionWeight(Connection connection) {
+				return null;
+			}
+			
+			@Override
+			protected Double getIncomingEReferenceWeight(EReference eReference) {
+				return null;
+			}
+			
+			@Override
+			protected Double getOutgoingEReferenceWeight(EReference eReference) {
+				return eReference == FamilyPackage.Literals.PERSON__PARENTS ? 1.0 : null;
+			}
+			
+			@Override
+			protected Double getConnectionMessageValue(BiFunction<Connection, Boolean, Double> state,
+					Connection activator, boolean incomingActivator, Node sender, Connection recipient,
+					boolean incomingRrecipient, Message<Double> parent, ProgressMonitor progressMonitor) {
+				
+				Double connectionMessageValue = super.getConnectionMessageValue(
+						state, 
+						activator, 
+						incomingActivator, 
+						sender, 
+						recipient, 
+						incomingRrecipient,
+						parent, 
+						progressMonitor);
+				
+				if (connectionMessageValue != null) {
+					return 0.8 * connectionMessageValue;
+				}
+				
+				return connectionMessageValue;
+			}
+			
+		};
+		
+		// Sender -> receiver:counter
+		Map<Element, Map<Node,double[]>> counters = new ConcurrentHashMap<>();
+		
+		Collector<Double> collector = new Collector<Double>() {
+			
+			@Override
+			public void outgoing(Node node, Connection connection, Message<Double> input, ProgressMonitor progressMonitor) {
+				Element rootSender = input.rootSender().sender();
+				if (rootSender != null) {
+					counters.computeIfAbsent(rootSender, e -> new ConcurrentHashMap<>()).computeIfAbsent(node, n -> new double[] { 0.0 })[0] += input.value();
+				}
+			}
+			
+			@Override
+			public void initial(Node node, Double value) {
+				System.out.println("Initial " + node + ": " + value);				
+			}
+			
+			@Override
+			public void incoming(Node node, Connection connection, Message<Double> input, ProgressMonitor progressMonitor) {
+				Element rootSender = input.rootSender().sender();
+				if (rootSender != null) {
+					counters.computeIfAbsent(rootSender, e -> new ConcurrentHashMap<>()).computeIfAbsent(node, n -> new double[] { 0.0 })[0] += input.value();
+				}
+			}
+			
+		};
+		Function<Map<Element, ProcessorInfo<BiFunction<Message<Double>, ProgressMonitor, Void>>>, Stream<BiFunction<Message<Double>, ProgressMonitor, Void>>> selector = processors -> {
+			return processors
+					.entrySet()
+					.stream()
+					.filter(e -> {
+						Element key = e.getKey();
+						if (key instanceof EObjectNode) {
+							EObjectNode eObjNode = (EObjectNode) key;
+							return eObjNode.get() instanceof Person && ((Person) eObjNode.get()).getName().equals("Alan");
+						}
+						return false;
+					})
+					.map(Map.Entry::getValue)
+					.map(pr -> pr.getProcessor());
+			
+		};
+		messageProcessor.processes(
+				1.0, 
+				selector, 
+				collector, 
+				progressMonitor);
+
+		for (Entry<Element, Map<Node, double[]>> se: counters.entrySet()) {			
+			Element key = se.getKey();
+			if (key instanceof EObjectNode) {
+				EObject sObj = ((EObjectNode) key).get();
+				if (sObj instanceof Person) {
+					System.out.println(((Person) sObj).getName());
+					for (Entry<Node, double[]> ne: se.getValue().entrySet().stream().sorted((a,b) -> a.getValue()[0] > b.getValue()[0] ? -1 : 1).toList()) {
+						Node nKey = ne.getKey();
+						if (key instanceof EObjectNode) {
+							EObject nObj = ((EObjectNode) nKey).get();
+							if (nObj instanceof Person) {
+								System.out.println("\t" + ((Person) nObj).getName() + ": " + ne.getValue()[0]);
+							}
+						}			
+					}
+				}
+			}			
+		}
+		
+	}	
 	
 }
