@@ -289,6 +289,12 @@ public class TestFamilySimilarity {
 		
 		DoubleEObjectGraphMessageProcessor<Void> messageProcessor = new DoubleEObjectGraphMessageProcessor<>(false, familyResource.getContents(), progressMonitor) {
 			
+			/**
+			 * Override this method to filter messages:
+			 * - Drop long messages
+			 * - Pass messages only through certain types of connections
+			 *   or from/to certain types of nodes
+			 */
 			@Override
 			protected boolean test(Message<Double> message, ProgressMonitor tpm) {
 				if (message.depth() > 20 || message.value() < 0.000001) {
@@ -301,7 +307,12 @@ public class TestFamilySimilarity {
 				}
 				return true; 
 			}
-					
+			
+			/*
+			 *  Customize connection weights and message values,
+			 *  return null for connections which shall not be traversed
+			 */  
+			
 			@Override
 			protected Double getOutgoingConnectionWeight(Connection connection) {
 				return connection instanceof EClassConnection ? 1.0 : null;
@@ -323,9 +334,15 @@ public class TestFamilySimilarity {
 			}
 			
 			@Override
-			protected Double getConnectionMessageValue(BiFunction<Connection, Boolean, Double> state,
-					Connection activator, boolean incomingActivator, Node sender, Connection recipient,
-					boolean incomingRrecipient, Message<Double> parent, ProgressMonitor progressMonitor) {
+			protected Double getConnectionMessageValue(
+					BiFunction<Connection, Boolean, Double> state,
+					Connection activator, 
+					boolean incomingActivator, 
+					Node sender, 
+					Connection recipient,
+					boolean incomingRrecipient, 
+					Message<Double> parent, 
+					ProgressMonitor progressMonitor) {
 				
 				Double connectionMessageValue = super.getConnectionMessageValue(
 						state, 
