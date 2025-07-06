@@ -1,6 +1,8 @@
 package org.nasdanika.models.family.demos.mapping.tests;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +17,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -23,12 +26,16 @@ import org.nasdanika.ai.emf.DoubleEObjectGraphMessageProcessor;
 import org.nasdanika.ai.emf.EObjectGraphMessageProcessor;
 import org.nasdanika.ai.emf.EObjectGraphMessageProcessor.Collector;
 import org.nasdanika.ai.emf.EObjectGraphMessageProcessor.Message;
+import org.nasdanika.ai.emf.similarity.DoubleEStructuralFeatureSimilarity;
+import org.nasdanika.ai.emf.similarity.DoubleEStructuralFeatureVectorMessageCollectorSimilarityConnectionFactory;
+import org.nasdanika.ai.emf.similarity.DoubleEStructuralFeatureVectorSimilarityConnection;
 import org.nasdanika.capability.CapabilityLoader;
 import org.nasdanika.capability.ServiceCapabilityFactory;
 import org.nasdanika.capability.ServiceCapabilityFactory.Requirement;
 import org.nasdanika.capability.emf.ResourceSetRequirement;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
@@ -443,6 +450,149 @@ public class TestFamilySimilarity {
 		
 		System.out.println(messageCounter + " / " + depthCounter);
 		
+	}
+	
+	@Test
+	public void testDoubleFeatureVectorInheritanceSimilarity() throws Exception {
+		CapabilityLoader capabilityLoader = new CapabilityLoader();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Requirement<ResourceSetRequirement, ResourceSet> requirement = ServiceCapabilityFactory.createRequirement(ResourceSet.class);		
+		ResourceSet resourceSet = capabilityLoader.loadOne(requirement, progressMonitor);
+				
+		File familyDiagramFile = new File("family.drawio").getCanonicalFile();
+		Resource familyResource = resourceSet.getResource(URI.createFileURI(familyDiagramFile.getAbsolutePath()), true);
+		
+		DoubleEObjectGraphMessageProcessor<Void> messageProcessor = new DoubleEObjectGraphMessageProcessor<>(false, familyResource.getContents(), progressMonitor) {
+			
+			/**
+			 * Override this method to filter messages:
+			 * - Drop long messages
+			 * - Pass messages only through certain types of connections
+			 *   or from/to certain types of nodes
+			 */
+			@Override
+			protected boolean test(Message<Double> message, ProgressMonitor tpm) {
+				if (message.depth() > 10 || message.value() < 0.000001) {
+					return false;
+				}
+				Element recipient = message.recipient();				
+				if (recipient instanceof EObjectNode) {
+					EObject eObject = ((EObjectNode) recipient).get();
+					return eObject instanceof Person || eObject instanceof EClass;
+				}
+				return true; 
+			}
+			
+			/*
+			 *  Customize connection weights and message values,
+			 *  return null for connections which shall not be traversed
+			 */  
+			
+			@Override
+			protected Double getOutgoingConnectionWeight(Connection connection) {
+				return connection instanceof EClassConnection ? 1.0 : null;
+			}
+			
+			@Override
+			protected Double getIncomingConnectionWeight(Connection connection) {
+				return connection instanceof EClassConnection ? 1.0 : null;
+			}
+			
+			@Override
+			protected Double getIncomingEReferenceWeight(EReference eReference) {
+				return eReference == EcorePackage.Literals.ECLASS__ESUPER_TYPES ? 1.0 : null;
+			}
+			
+			@Override
+			protected Double getOutgoingEReferenceWeight(EReference eReference) {
+				return eReference == EcorePackage.Literals.ECLASS__ESUPER_TYPES ? 1.0 : null;
+			}
+			
+			@Override
+			protected Double getConnectionMessageValue(
+					BiFunction<Connection, Boolean, Double> state,
+					Connection activator, 
+					boolean incomingActivator, 
+					Node sender, 
+					Connection recipient,
+					boolean incomingRrecipient, 
+					Message<Double> parent, 
+					ProgressMonitor progressMonitor) {
+				
+				Double connectionMessageValue = super.getConnectionMessageValue(
+						state, 
+						activator, 
+						incomingActivator, 
+						sender, 
+						recipient, 
+						incomingRrecipient,
+						parent, 
+						progressMonitor);
+				
+				if (connectionMessageValue != null) {
+					return 0.8 * connectionMessageValue;
+				}
+				
+				return connectionMessageValue;
+			}
+			
+		};
+		
+		DoubleEStructuralFeatureVectorMessageCollectorSimilarityConnectionFactory similarityConnectionFactory = new DoubleEStructuralFeatureVectorMessageCollectorSimilarityConnectionFactory();
+		
+		Function<Map<Element, ProcessorInfo<BiFunction<Message<Double>, ProgressMonitor, Void>>>, Stream<BiFunction<Message<Double>, ProgressMonitor, Void>>> selector = processors -> {
+			return processors
+					.entrySet()
+					.stream()
+					.filter(e -> {
+						Element key = e.getKey();
+						if (key instanceof EObjectNode) {
+							EObjectNode eObjNode = (EObjectNode) key;
+							return eObjNode.get() instanceof Person && ((Person) eObjNode.get()).getName().equals("Elias");
+						}
+						return false;
+					})
+					.map(Map.Entry::getValue)
+					.map(pr -> pr.getProcessor());
+			
+		};
+		
+		AtomicLong messageCounter = new AtomicLong();
+		AtomicLong depthCounter = new AtomicLong();
+		
+		BiFunction<Message<Double>, ProgressMonitor, Message<Double>> messageTransformer = (m,p) -> {
+			messageCounter.incrementAndGet();
+			depthCounter.addAndGet(m.depth());
+			return m;
+		};
+		messageProcessor.processes(
+				1.0, 
+				selector, 
+				messageTransformer,
+				similarityConnectionFactory, 
+				progressMonitor);
+		
+		Collection<DoubleEStructuralFeatureVectorSimilarityConnection> similarityConnections = similarityConnectionFactory.createSimilarityConnections();
+		System.out.println(similarityConnections.size());
+		Map<Node, List<DoubleEStructuralFeatureVectorSimilarityConnection>> groupedBySource = Util.groupBy(similarityConnections, Connection::getSource);
+		
+		for (Entry<Node, List<DoubleEStructuralFeatureVectorSimilarityConnection>> se: groupedBySource.entrySet()) {
+			System.out.println(se.getKey());
+			for (DoubleEStructuralFeatureVectorSimilarityConnection te: se.getValue()) {
+				EObject target = te.getTarget().get();
+				if (target instanceof Person) {
+					DoubleEStructuralFeatureSimilarity doubleEStructuralFeatureSimilarity = te.get();
+					System.out.println("\t" + ((Person) target).getName() + ": " + doubleEStructuralFeatureSimilarity.get());
+					for (Entry<EStructuralFeature, Double> fe: doubleEStructuralFeatureSimilarity.getFeatureSimilarities().entrySet()) {
+						System.out.println("\t\t" + fe.getKey().getName() + ": " + fe.getValue());
+					}
+				}
+			}
+		}
+		
+		System.out.println(messageCounter + " / " + depthCounter);
+		
 	}	
+	
 	
 }
